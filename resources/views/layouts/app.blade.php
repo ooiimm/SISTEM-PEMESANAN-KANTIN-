@@ -15,7 +15,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        {{-- ▼▼▼ TAMBAHKAN CLASS 'flex' dan 'flex-col' DI SINI ▼▼▼ --}}
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -28,9 +29,19 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            {{-- ▼▼▼ TAMBAHKAN CLASS 'flex-grow' DI SINI ▼▼▼ --}}
+            <main class="flex-grow">
                 {{ $slot }}
             </main>
+            
+            {{-- ▼▼▼ HAPUS CLASS 'mt-auto' DARI SINI ▼▼▼ --}}
+            <footer class="bg-white dark:bg-gray-800 shadow">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+                        Pesend © {{ date('Y') }}
+                    </p>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

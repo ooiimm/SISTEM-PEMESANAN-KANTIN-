@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -42,6 +43,29 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // INI ADALAH BARIS KUNCINYA
+        // Secara paksa mengarahkan ke halaman login setelah logout.
+        return redirect()->route('login'); 
+    }
+
+    public function loginAsGuest()
+    {
+        // Cari user tamu berdasarkan NIM unik yang kita buat di seeder
+        $guest = User::where('nim', 'guest_user_account')->first();
+
+        // Jika user tamu tidak ditemukan, kembali ke login dengan pesan error
+        if (!$guest) {
+            return redirect()->route('login')->with('error', 'Fitur Guest tidak tersedia saat ini.');
+        }
+
+        // Loginkan user tamu tersebut secara otomatis
+        Auth::login($guest);
+
+        // Regenerasi session untuk keamanan
+        request()->session()->regenerate();
+
+        // Arahkan ke dashboard
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }
+
